@@ -77,5 +77,122 @@ public class GameBoard extends JFrame {
         }
     }
 
+    Game getGame() {
+        return game;
+    }
+
+    boolean isTurnable(int x, int y){
+        boolean result = false;
+
+        if(gameField[y][x] == nullSymbol)
+            result = true;
+
+        return result;
+    }
+
+    /**
+     * Обновление матрицы после хода
+     * @param x - по горизонтали
+     * @param y - по вертикали
+     */
+    void updateGameField(int x, int y){
+        gameField[y][x] = game.getCurrentPlayer().getPlayerSign();
+
+    }
+
+    /**
+     * Проверка победы по столбцам и линиям
+     * @return флаг победы
+     */
+
+    boolean checkWin(){
+        boolean result = false;
+
+        char playerSymbol = getGame().getCurrentPlayer().getPlayerSign();
+
+        if(checkWinDiagonals(playerSymbol) || checkwinLines(playerSymbol)){
+            result = true;
+
+        }
+
+
+        return result;
+    }
+
+    private boolean checkwinLines(char playerSymbol){
+        boolean cols, rows, result;
+
+        result = false;
+
+        for (int col = 0; col < dimension; col++){
+            cols = true;
+            rows = true;
+
+            for (int row = 0; row < dimension; row++){
+                cols &= (gameField[col][row] == playerSymbol);
+                rows &= (gameField[row][col] == playerSymbol);
+
+            }
+
+            // Это условие после каждой проверки колонки и столбца
+            // позволяет остновить дальнейшее выполнение, без проверки
+            // всех остальных столбцов и строк.
+            if (cols || rows){
+                result = true;
+                break;
+            }
+
+        }
+        return result;
+    }
+
+
+    private  boolean checkWinDiagonals(char playerSymbol){
+        boolean cols, rows, result;
+
+        result = false;
+
+        for (int col = 0; col < dimension; col++){
+            cols = true;
+            rows = true;
+
+            for (int row = 0; row < dimension; row++){
+                cols &= (gameField[col][row] == playerSymbol);
+                rows &= (gameField[row][col] == playerSymbol);
+
+            }
+
+            // Это условие после каждой проверки колонки и столбца
+            // позволяет остновить дальнейшее выполнение, без проверки
+            // всех остальных столбцов и строк.
+            if (cols || rows){
+                result = true;
+                break;
+            }
+
+        }
+        return result;
+    }
+
+    /**
+     *  Метод проверки заполненности поля
+     * @return boolean
+     */
+    boolean isFull(){
+        boolean result = true;
+
+        for (int i = 0; i < dimension; i++){
+            for(int j = 0; j < dimension; j++){
+                if(gameField[i][j] == nullSymbol)
+                    result = false;
+            }
+        }
+        return result;
+    }
+
+
+    public GameButton getButton(int buttonIndex){
+        return gameButtons[buttonIndex];
+    }
 
 }
